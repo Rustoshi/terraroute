@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { withAuth, AuthenticatedHandler } from "@/middleware/withAuth";
 import { validateData, sendEmailSchema } from "@/utils/validation";
-import { sendEmail } from "@/lib/resend";
+import { sendEmail } from "@/lib/unosend";
 import { ApiResponse } from "@/types";
 
 /**

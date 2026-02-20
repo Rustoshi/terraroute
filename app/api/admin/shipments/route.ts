@@ -6,7 +6,7 @@ import { withAuth, AuthenticatedHandler } from "@/middleware/withAuth";
 import { validateData, createShipmentSchema, paginationSchema, normalizeLocationInfo, normalizeContactInfo } from "@/utils/validation";
 import { generateTrackingCode } from "@/utils/trackingCode";
 import { calculateEstimatedDeliveryDate } from "@/utils/quoteEstimation";
-import { sendShipmentCreatedEmail } from "@/lib/resend";
+import { sendShipmentCreatedEmail } from "@/lib/unosend";
 import { ApiResponse, PaginatedResponse, IShipment, ShipmentStatus, ServiceType } from "@/types";
 import mongoose, { Types } from "mongoose";
 
@@ -73,7 +73,7 @@ const handlePost: AuthenticatedHandler = async (request, context) => {
     // Use transaction for atomic shipment + tracking event creation
     const session = await mongoose.startSession();
     let shipment;
-    
+
     try {
       session.startTransaction();
 

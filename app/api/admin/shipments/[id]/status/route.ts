@@ -4,7 +4,7 @@ import Shipment from "@/models/Shipment";
 import TrackingEvent from "@/models/TrackingEvent";
 import { withAuth, AuthenticatedHandler } from "@/middleware/withAuth";
 import { validateData, updateShipmentStatusSchema } from "@/utils/validation";
-import { sendStatusUpdateEmail } from "@/lib/resend";
+import { sendStatusUpdateEmail } from "@/lib/unosend";
 import { ApiResponse, IShipment } from "@/types";
 import { Types } from "mongoose";
 

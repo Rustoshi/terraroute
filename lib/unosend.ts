@@ -1,28 +1,28 @@
-import { Resend } from "resend";
+import { Unosend } from "@unosend/node";
 import { connectDB } from "./db";
 import EmailLog from "@/models/EmailLog";
 import { EmailStatus } from "@/types";
 import { Types } from "mongoose";
 
 /**
- * Resend email client initialization.
+ * Unosend email client initialization.
  * Lazy-loaded to prevent build-time errors when API key is not set.
  */
-let resendClient: Resend | null = null;
+let unosendClient: Unosend | null = null;
 
-function getResendClient(): Resend {
-  if (!resendClient) {
-    const apiKey = process.env.RESEND_API_KEY;
+function getUnosendClient(): Unosend {
+  if (!unosendClient) {
+    const apiKey = process.env.UNOSEND_API_KEY;
     if (!apiKey) {
-      throw new Error("RESEND_API_KEY environment variable is not set");
+      throw new Error("UNOSEND_API_KEY environment variable is not set");
     }
-    resendClient = new Resend(apiKey);
+    unosendClient = new Unosend(apiKey);
   }
-  return resendClient;
+  return unosendClient;
 }
 
 function getFromEmail(): string {
-  return process.env.RESEND_FROM_EMAIL || "noreply@example.com";
+  return process.env.UNOSEND_FROM_EMAIL || process.env.RESEND_FROM_EMAIL || "noreply@terraroutedelivery.pro";
 }
 
 function getCompanyName(): string {
@@ -52,9 +52,9 @@ export async function sendEmail(options: SendEmailOptions): Promise<EmailResult>
   try {
     const fromEmail = getFromEmail();
     console.log("📧 Sending email from:", fromEmail, "to:", recipients);
-    console.log("📧 API Key present:", !!process.env.RESEND_API_KEY);
+    console.log("📧 API Key present:", !!process.env.UNOSEND_API_KEY);
     
-    const { data, error } = await getResendClient().emails.send({
+    const { data, error } = await getUnosendClient().emails.send({
       from: fromEmail,
       to: recipients,
       subject,
@@ -62,7 +62,7 @@ export async function sendEmail(options: SendEmailOptions): Promise<EmailResult>
     });
 
     if (error) {
-      console.error("❌ Resend API error details:", JSON.stringify(error, null, 2));
+      console.error("❌ Unosend API error details:", JSON.stringify(error, null, 2));
       await EmailLog.create({
         to: recipients.join(", "),
         subject,
@@ -332,4 +332,4 @@ export async function sendQuoteResponseEmail(
   });
 }
 
-export { getResendClient };
+export { getUnosendClient };

@@ -3,7 +3,7 @@ import { connectDB } from "@/lib/db";
 import Quote from "@/models/Quote";
 import { withAuth, AuthenticatedHandler } from "@/middleware/withAuth";
 import { validateData, respondQuoteSchema } from "@/utils/validation";
-import { sendQuoteResponseEmail } from "@/lib/resend";
+import { sendQuoteResponseEmail } from "@/lib/unosend";
 import { ApiResponse, IQuote, QuoteStatus } from "@/types";
 import { Types } from "mongoose";
 
